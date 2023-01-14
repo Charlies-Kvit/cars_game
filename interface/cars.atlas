@@ -1,0 +1,397 @@
+
+cars.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+dumptruck
+  rotate: false
+  xy: 1, 1
+  size: 54, 123
+  orig: 54, 123
+  offset: 0, 0
+  index: -1
+tow_truck
+  rotate: false
+  xy: 57, 54
+  size: 33, 70
+  orig: 33, 70
+  offset: 0, 0
+  index: -1
+tow_truck2
+  rotate: false
+  xy: 92, 54
+  size: 33, 70
+  orig: 33, 70
+  offset: 0, 0
+  index: -1
+tow_truck3
+  rotate: false
+  xy: 127, 55
+  size: 33, 69
+  orig: 33, 69
+  offset: 0, 0
+  index: -1
+truck2
+  rotate: false
+  xy: 162, 58
+  size: 33, 66
+  orig: 33, 66
+  offset: 0, 0
+  index: -1
+truck3
+  rotate: false
+  xy: 197, 58
+  size: 33, 66
+  orig: 33, 66
+  offset: 0, 0
+  index: -1
+landcruiser
+  rotate: false
+  xy: 232, 68
+  size: 29, 56
+  orig: 29, 56
+  offset: 0, 0
+  index: -1
+landcruiser2
+  rotate: false
+  xy: 263, 68
+  size: 29, 56
+  orig: 29, 56
+  offset: 0, 0
+  index: -1
+landcruiser3
+  rotate: false
+  xy: 294, 68
+  size: 29, 56
+  orig: 29, 56
+  offset: 0, 0
+  index: -1
+van
+  rotate: false
+  xy: 325, 68
+  size: 29, 56
+  orig: 29, 56
+  offset: 0, 0
+  index: -1
+raptor
+  rotate: false
+  xy: 356, 69
+  size: 28, 55
+  orig: 28, 55
+  offset: 0, 0
+  index: -1
+raptor2
+  rotate: false
+  xy: 386, 69
+  size: 28, 55
+  orig: 28, 55
+  offset: 0, 0
+  index: -1
+pickup
+  rotate: false
+  xy: 57, 1
+  size: 28, 51
+  orig: 28, 51
+  offset: 0, 0
+  index: -1
+pickup2
+  rotate: false
+  xy: 416, 73
+  size: 28, 51
+  orig: 28, 51
+  offset: 0, 0
+  index: -1
+pickup3
+  rotate: false
+  xy: 87, 1
+  size: 28, 51
+  orig: 28, 51
+  offset: 0, 0
+  index: -1
+suv
+  rotate: false
+  xy: 446, 74
+  size: 28, 50
+  orig: 28, 50
+  offset: 0, 0
+  index: -1
+suv2
+  rotate: false
+  xy: 476, 74
+  size: 28, 50
+  orig: 28, 50
+  offset: 0, 0
+  index: -1
+van2
+  rotate: false
+  xy: 506, 74
+  size: 27, 50
+  orig: 27, 50
+  offset: 0, 0
+  index: -1
+van3
+  rotate: false
+  xy: 535, 74
+  size: 27, 50
+  orig: 27, 50
+  offset: 0, 0
+  index: -1
+challenger2
+  rotate: false
+  xy: 564, 76
+  size: 28, 48
+  orig: 28, 48
+  offset: 0, 0
+  index: -1
+challenger3
+  rotate: false
+  xy: 594, 76
+  size: 28, 48
+  orig: 28, 48
+  offset: 0, 0
+  index: -1
+camaro
+  rotate: false
+  xy: 624, 76
+  size: 26, 48
+  orig: 26, 48
+  offset: 0, 0
+  index: -1
+camaro2
+  rotate: false
+  xy: 652, 76
+  size: 26, 48
+  orig: 26, 48
+  offset: 0, 0
+  index: -1
+gwagon
+  rotate: false
+  xy: 680, 77
+  size: 27, 47
+  orig: 27, 47
+  offset: 0, 0
+  index: -1
+gwagon2
+  rotate: false
+  xy: 709, 77
+  size: 27, 47
+  orig: 27, 47
+  offset: 0, 0
+  index: -1
+patrol
+  rotate: false
+  xy: 738, 77
+  size: 27, 47
+  orig: 27, 47
+  offset: 0, 0
+  index: -1
+patrol2
+  rotate: false
+  xy: 767, 77
+  size: 27, 47
+  orig: 27, 47
+  offset: 0, 0
+  index: -1
+lambo
+  rotate: false
+  xy: 796, 78
+  size: 27, 46
+  orig: 27, 46
+  offset: 0, 0
+  index: -1
+lambo2
+  rotate: false
+  xy: 825, 78
+  size: 27, 46
+  orig: 27, 46
+  offset: 0, 0
+  index: -1
+lancer
+  rotate: false
+  xy: 854, 77
+  size: 26, 47
+  orig: 26, 47
+  offset: 0, 0
+  index: -1
+lancer2
+  rotate: false
+  xy: 882, 77
+  size: 26, 47
+  orig: 26, 47
+  offset: 0, 0
+  index: -1
+lexus
+  rotate: false
+  xy: 910, 76
+  size: 26, 48
+  orig: 26, 48
+  offset: 0, 0
+  index: -1
+lexus2
+  rotate: false
+  xy: 938, 76
+  size: 26, 48
+  orig: 26, 48
+  offset: 0, 0
+  index: -1
+lexus3
+  rotate: false
+  xy: 966, 76
+  size: 26, 48
+  orig: 26, 48
+  offset: 0, 0
+  index: -1
+mustang2
+  rotate: false
+  xy: 994, 75
+  size: 26, 49
+  orig: 26, 49
+  offset: 0, 0
+  index: -1
+taxi
+  rotate: false
+  xy: 117, 4
+  size: 26, 48
+  orig: 26, 48
+  offset: 0, 0
+  index: -1
+taxi2
+  rotate: false
+  xy: 145, 5
+  size: 26, 48
+  orig: 26, 48
+  offset: 0, 0
+  index: -1
+mustang3
+  rotate: false
+  xy: 173, 9
+  size: 26, 47
+  orig: 26, 47
+  offset: 0, 0
+  index: -1
+bmw
+  rotate: false
+  xy: 201, 9
+  size: 25, 47
+  orig: 25, 47
+  offset: 0, 0
+  index: -1
+bmw2
+  rotate: false
+  xy: 228, 9
+  size: 25, 47
+  orig: 25, 47
+  offset: 0, 0
+  index: -1
+bmw3
+  rotate: false
+  xy: 255, 19
+  size: 25, 47
+  orig: 25, 47
+  offset: 0, 0
+  index: -1
+sunny
+  rotate: false
+  xy: 282, 21
+  size: 25, 45
+  orig: 25, 45
+  offset: 0, 0
+  index: -1
+wrangler
+  rotate: false
+  xy: 309, 20
+  size: 24, 46
+  orig: 24, 46
+  offset: 0, 0
+  index: -1
+wrangler2
+  rotate: false
+  xy: 335, 20
+  size: 24, 46
+  orig: 24, 46
+  offset: 0, 0
+  index: -1
+wrangler3
+  rotate: false
+  xy: 361, 21
+  size: 24, 46
+  orig: 24, 46
+  offset: 0, 0
+  index: -1
+wrangler4
+  rotate: false
+  xy: 387, 21
+  size: 24, 46
+  orig: 24, 46
+  offset: 0, 0
+  index: -1
+tida
+  rotate: false
+  xy: 413, 24
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: -1
+tida2
+  rotate: false
+  xy: 439, 28
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: -1
+tida3
+  rotate: false
+  xy: 465, 29
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: -1
+mini
+  rotate: false
+  xy: 491, 30
+  size: 24, 42
+  orig: 24, 42
+  offset: 0, 0
+  index: -1
+convertible
+  rotate: false
+  xy: 517, 31
+  size: 24, 41
+  orig: 24, 41
+  offset: 0, 0
+  index: -1
+figo
+  rotate: false
+  xy: 543, 31
+  size: 24, 41
+  orig: 24, 41
+  offset: 0, 0
+  index: -1
+figo2
+  rotate: false
+  xy: 569, 33
+  size: 24, 41
+  orig: 24, 41
+  offset: 0, 0
+  index: -1
+porsche
+  rotate: false
+  xy: 595, 33
+  size: 24, 41
+  orig: 24, 41
+  offset: 0, 0
+  index: -1
+bike2
+  rotate: false
+  xy: 621, 39
+  size: 16, 35
+  orig: 16, 35
+  offset: 0, 0
+  index: -1
+bike
+  rotate: false
+  xy: 639, 41
+  size: 16, 33
+  orig: 16, 33
+  offset: 0, 0
+  index: -1
