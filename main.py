@@ -1,11 +1,14 @@
+import random
+
 import pygame
 import os
 import sys
 
 pygame.init()
 pygame.display.set_caption('')
-size = WIDTH, HEIGHT = 500, 500
+size = WIDTH, HEIGHT = 800, 800
 screen = pygame.display.set_mode(size)
+cars_images = os.listdir('interface/cars')
 
 
 def load_image(name, colorkey=None):
@@ -45,9 +48,9 @@ class Hero(pygame.sprite.Sprite):
         super().__init__(*group)
         self.image = Hero.image
         self.rect = self.image.get_rect()
-        self.U = 1
-        self.rect.x = WIDTH / 2 - 15
-        self.rect.y = HEIGHT / 4 * 3 - 15
+        self.U = 6
+        self.rect.centerx = WIDTH / 2 - 15
+        self.rect.centery = HEIGHT / 4 * 3 - 15
 
     def update(self):
         global UP, DOWN, RIGHT, LEFT
@@ -55,23 +58,23 @@ class Hero(pygame.sprite.Sprite):
             if pygame.sprite.collide_mask(self, car):
                 print('Game over')
                 terminate()
-            if UP:
+            if UP and self.rect.y > 0:
                 self.rect = self.rect.move(0, -self.U)
-            if DOWN:
+            if DOWN and self.rect.y < HEIGHT - self.image.get_height():
                 self.rect = self.rect.move(0, self.U)
-            if LEFT:
+            if LEFT and self.rect.x > 0:
                 self.rect = self.rect.move(-self.U, 0)
-            if RIGHT:
+            if RIGHT and self.rect.x < WIDTH - self.image.get_width():
                 self.rect = self.rect.move(self.U, 0)
 
 
 class Car(pygame.sprite.Sprite):
-    image = load_image(os.path.join('cars', 'tow_truck1.png'))
+    image = load_image(os.path.join('cars', random.choice(cars_images)))
 
     def __init__(self, position, *group):
         super().__init__(*group)
         self.image = Car.image
-        self.U = 1
+        self.U = 2
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
