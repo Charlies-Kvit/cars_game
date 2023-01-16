@@ -1,4 +1,5 @@
 import random
+from random import randint
 
 import pygame
 import os
@@ -25,6 +26,32 @@ def load_image(name, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
+def random_appearence(over_cars):
+    over_cars_cords = []
+    for i in over_cars:
+        if i.rect.topleft[1] <= 520:
+            over_cars_cords.append((i.rect.topleft[0], i.rect.topright[0]))
+    print(over_cars_cords)
+    # thirst, second, third = range(0, 233), range(234, 466), range(467, 700)
+    asd = 0
+    flag = True
+    while flag:
+        x = randint(10, WIDTH - 129)
+        asd += 1
+        with open('logs/logs.txt', 'a') as w:
+            w.write(str(x) + ' ' + str(asd) + '\n')
+        kol_vo_sovp = 0
+        for i in over_cars_cords:
+            if x not in range(i[0], i[1] + 1) and x + 120 not in range(i[0], i[1] + 1):
+                kol_vo_sovp += 1
+        if kol_vo_sovp == len(over_cars_cords):
+            print(x, x + 119)
+            Car((x, -300), all_sprites, cars_sprites)
+            flag = False
+            break
+        else:
+            kol_vo_sovp = 0
 
 
 def terminate():
@@ -93,7 +120,8 @@ if __name__ == '__main__':
     running = True
     Road(all_sprites, road_sprite)
     Hero(all_sprites, hero_sprite)
-    Car((10, 10), all_sprites, cars_sprites)
+    for i in range(3):
+        random_appearence(cars_sprites)
     DOWN, UP, LEFT, RIGHT = False, False, False, False
     while running:
         for event in pygame.event.get():
