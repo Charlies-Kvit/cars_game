@@ -54,18 +54,18 @@ class Hero(pygame.sprite.Sprite):
 
     def update(self):
         global UP, DOWN, RIGHT, LEFT
-        for car in cars_sprites:
-            if pygame.sprite.collide_mask(self, car):
+        for auto_car in cars_sprites:
+            if pygame.sprite.collide_mask(self, auto_car):
                 print('Game over')
                 terminate()
-            if UP and self.rect.y > 0:
-                self.rect = self.rect.move(0, -self.U)
-            if DOWN and self.rect.y < HEIGHT - self.image.get_height():
-                self.rect = self.rect.move(0, self.U)
-            if LEFT and self.rect.x > 0:
-                self.rect = self.rect.move(-self.U, 0)
-            if RIGHT and self.rect.x < WIDTH - self.image.get_width():
-                self.rect = self.rect.move(self.U, 0)
+        if UP and self.rect.y > 0:
+            self.rect = self.rect.move(0, -self.U)
+        if DOWN and self.rect.y < HEIGHT - self.image.get_height():
+            self.rect = self.rect.move(0, self.U)
+        if LEFT and self.rect.x > 0:
+            self.rect = self.rect.move(-self.U, 0)
+        if RIGHT and self.rect.x < WIDTH - self.image.get_width():
+            self.rect = self.rect.move(self.U, 0)
 
 
 class Car(pygame.sprite.Sprite):
@@ -117,6 +117,10 @@ if __name__ == '__main__':
                     DOWN = False
                 if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     RIGHT = False
+        for car in cars_sprites:
+            if car.rect.y >= HEIGHT:
+                cars_sprites.remove(car)
+                all_sprites.remove(car)
         all_sprites.update()
         screen.fill('black')
         all_sprites.draw(screen)
