@@ -32,7 +32,7 @@ def random_appearence(over_cars):
     for i in over_cars:
         if i.rect.topleft[1] <= 520:
             over_cars_cords.append((i.rect.topleft[0], i.rect.topright[0]))
-    print(over_cars_cords)
+    # print(over_cars_cords)
     # thirst, second, third = range(0, 233), range(234, 466), range(467, 700)
     asd = 0
     flag = True
@@ -46,7 +46,7 @@ def random_appearence(over_cars):
             if x not in range(i[0], i[1] + 1) and x + 120 not in range(i[0], i[1] + 1):
                 kol_vo_sovp += 1
         if kol_vo_sovp == len(over_cars_cords):
-            print(x, x + 119)
+            # print(x, x + 119)
             Car((x, -300), all_sprites, cars_sprites)
             flag = False
             break
