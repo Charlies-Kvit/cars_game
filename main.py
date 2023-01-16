@@ -1,15 +1,28 @@
-import random
-from random import randint
-
+from random import randint, choice
 import pygame
 import os
 import sys
 
+road = pygame.image.load('interface/road.png')
 pygame.init()
 pygame.display.set_caption('')
-size = WIDTH, HEIGHT = 800, 800
+size = WIDTH, HEIGHT = road.get_size()
 screen = pygame.display.set_mode(size)
 cars_images = os.listdir('interface/cars')
+y1 = 0
+y2 = -HEIGHT
+
+
+def update_background():
+    global y1, y2
+    screen.blit(road, (0, y1))
+    screen.blit(road, (0, y2))
+    y1 += 5
+    y2 += 5
+    if y1 > HEIGHT:
+        y1 = -HEIGHT
+    if y2 > HEIGHT:
+        y2 = -HEIGHT
 
 
 def load_image(name, colorkey=None):
@@ -26,6 +39,7 @@ def load_image(name, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
 
 def random_appearence(over_cars):
     over_cars_cords = []
@@ -59,13 +73,13 @@ def terminate():
     sys.exit()
 
 
-class Road(pygame.sprite.Sprite):
+'''class Road(pygame.sprite.Sprite):
     image = load_image('road.png')
 
     def __init__(self, *group):
         super().__init__(*group)
         self.image = Road.image
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect()'''
 
 
 class Hero(pygame.sprite.Sprite):
@@ -89,19 +103,19 @@ class Hero(pygame.sprite.Sprite):
             self.rect = self.rect.move(0, -self.U)
         if DOWN and self.rect.y < HEIGHT - self.image.get_height():
             self.rect = self.rect.move(0, self.U)
-        if LEFT and self.rect.x > 0:
+        if LEFT and self.rect.x > 101:
             self.rect = self.rect.move(-self.U, 0)
-        if RIGHT and self.rect.x < WIDTH - self.image.get_width():
+        if RIGHT and self.rect.x < WIDTH - self.image.get_width() - 101:
             self.rect = self.rect.move(self.U, 0)
 
 
 class Car(pygame.sprite.Sprite):
-    image = load_image(os.path.join('cars', random.choice(cars_images)))
+    image = load_image(os.path.join('cars', choice(cars_images)))
 
     def __init__(self, position, *group):
         super().__init__(*group)
         self.image = Car.image
-        self.U = 2
+        self.U = randint(2, 6)
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
@@ -118,7 +132,7 @@ if __name__ == '__main__':
     cars_sprites = pygame.sprite.Group()
     clock = pygame.time.Clock()
     running = True
-    Road(all_sprites, road_sprite)
+    # Road(all_sprites, road_sprite)
     Hero(all_sprites, hero_sprite)
     for i in range(3):
         random_appearence(cars_sprites)
@@ -150,7 +164,7 @@ if __name__ == '__main__':
                 cars_sprites.remove(car)
                 all_sprites.remove(car)
         all_sprites.update()
-        screen.fill('black')
+        update_background()
         all_sprites.draw(screen)
         clock.tick(120)
         pygame.display.flip()
