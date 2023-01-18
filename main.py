@@ -51,7 +51,7 @@ def random_appearence(over_cars):
     asd = 0
     flag = True
     while flag:
-        x = randint(10, WIDTH - 129)
+        x = randint(100, WIDTH - 229)
         asd += 1
         with open('logs/logs.txt', 'a') as w:
             w.write(str(x) + ' ' + str(asd) + '\n')
