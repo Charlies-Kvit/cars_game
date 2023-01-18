@@ -1,4 +1,5 @@
 from random import randint, choice
+from easter_game import start_easter_egg
 import pygame
 import os
 import sys
@@ -42,6 +43,7 @@ def load_image(name, colorkey=None):
 
 
 def random_appearence(over_cars):
+    global easter_flag
     over_cars_cords = []
     for i in over_cars:
         if i.rect.topleft[1] <= 520:
@@ -61,6 +63,11 @@ def random_appearence(over_cars):
                 kol_vo_sovp += 1
         if kol_vo_sovp == len(over_cars_cords):
             print(x, x + 119)
+            # if randint(1, 100) == 3 and easter_flag:
+            if easter_flag:
+                EasterCar((x, -300), all_sprites, cars_sprites, easter_sprite)
+                easter_flag, flag = False, False
+                continue
             Car((x, -300), all_sprites, cars_sprites)
             flag = False
             break
@@ -82,6 +89,24 @@ def terminate():
         self.rect = self.image.get_rect()'''
 
 
+class Xcross(pygame.sprite.Sprite):
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.image = pygame.Surface((2 * 10, 2 * 10),
+                                    pygame.SRCALPHA, 32)
+        pygame.draw.circle(self.image, pygame.Color("red"),
+                           (10, 10), 10)
+        self.rect = self.image.get_rect()
+        print(self.rect)
+        self.rect.centerx = WIDTH - 15
+        self.rect.centery = 55
+
+    def update(self, pos=None):
+        if pos is None:
+            return
+        print(pos)
+
+
 class Hero(pygame.sprite.Sprite):
     image = load_image('hero_car.png')
 
@@ -95,8 +120,11 @@ class Hero(pygame.sprite.Sprite):
 
     def update(self):
         global UP, DOWN, RIGHT, LEFT
-        for auto_car in cars_sprites:
+        for auto_car in cars_sprites.sprites():
+            print(auto_car)
             if pygame.sprite.collide_mask(self, auto_car):
+                if auto_car in easter_sprite:
+                    start_easter_egg()
                 print('Game over')
                 terminate()
         if UP and self.rect.y > 0:
@@ -110,19 +138,43 @@ class Hero(pygame.sprite.Sprite):
 
 
 class Car(pygame.sprite.Sprite):
-    image = load_image(os.path.join('cars', choice(cars_images)))
-
     def __init__(self, position, *group):
         super().__init__(*group)
-        self.image = Car.image
-        self.U = randint(2, 6)
+        self.image = load_image(os.path.join('cars', choice(cars_images)))
+        self.U = randint(5, 10)
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
         self.rect.y = position[1]
 
     def update(self):
-        self.rect = self.rect.move(0, self.U)
+        xu = 0
+        if self.rect.x < 101:
+            xu = 2
+        elif self.rect.x > WIDTH - self.image.get_width() - 101:
+            xu = -2
+        self.rect = self.rect.move(xu, self.U)
+
+
+class EasterCar(pygame.sprite.Sprite):
+    image = load_image(os.path.join('easter_car', "easter_car.png"))
+
+    def __init__(self, position, *group):
+        super().__init__(*group)
+        self.image = EasterCar.image
+        self.U = randint(6, 10)
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+
+    def update(self):
+        xu = 0
+        if self.rect.x < 101:
+            xu = 2
+        elif self.rect.x > WIDTH - self.image.get_width() - 101:
+            xu = -2
+        self.rect = self.rect.move(xu, self.U)
 
 
 if __name__ == '__main__':
@@ -130,10 +182,12 @@ if __name__ == '__main__':
     hero_sprite = pygame.sprite.Group()
     road_sprite = pygame.sprite.Group()
     cars_sprites = pygame.sprite.Group()
+    xcross_sprite = pygame.sprite.Group()
+    easter_sprite = pygame.sprite.Group()
+    easter_flag = True
     clock = pygame.time.Clock()
     running = True
-    # Road(all_sprites, road_sprite)
-    Hero(all_sprites, hero_sprite)
+    Hero(all_sprites, hero_sprite), Xcross(all_sprites)
     for i in range(3):
         random_appearence(cars_sprites)
     DOWN, UP, LEFT, RIGHT = False, False, False, False
@@ -150,6 +204,8 @@ if __name__ == '__main__':
                     DOWN = True
                 if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     RIGHT = True
+                if event.key == pygame.K_ESCAPE:
+                    running = False
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_w or event.key == pygame.K_UP:
                     UP = False
@@ -159,6 +215,8 @@ if __name__ == '__main__':
                     DOWN = False
                 if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     RIGHT = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                xcross_sprite.update(event.pos)
         for car in cars_sprites:
             if car.rect.y >= HEIGHT:
                 cars_sprites.remove(car)
