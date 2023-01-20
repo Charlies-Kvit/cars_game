@@ -63,8 +63,7 @@ def random_appearence(over_cars):
                 kol_vo_sovp += 1
         if kol_vo_sovp == len(over_cars_cords):
             print(x, x + 119)
-            # if randint(1, 100) == 3 and easter_flag:
-            if easter_flag:
+            if randint(1, 100) == 0 and easter_flag:
                 EasterCar((x, -300), all_sprites, cars_sprites, easter_sprite)
                 easter_flag, flag = False, False
                 continue
@@ -78,15 +77,6 @@ def random_appearence(over_cars):
 def terminate():
     pygame.quit()
     sys.exit()
-
-
-'''class Road(pygame.sprite.Sprite):
-    image = load_image('road.png')
-
-    def __init__(self, *group):
-        super().__init__(*group)
-        self.image = Road.image
-        self.rect = self.image.get_rect()'''
 
 
 class Xcross(pygame.sprite.Sprite):
@@ -121,7 +111,6 @@ class Hero(pygame.sprite.Sprite):
     def update(self):
         global UP, DOWN, RIGHT, LEFT
         for auto_car in cars_sprites.sprites():
-            print(auto_car)
             if pygame.sprite.collide_mask(self, auto_car):
                 if auto_car in easter_sprite:
                     start_easter_egg()
@@ -221,6 +210,7 @@ if __name__ == '__main__':
             if car.rect.y >= HEIGHT:
                 cars_sprites.remove(car)
                 all_sprites.remove(car)
+                random_appearence(cars_sprites)
         all_sprites.update()
         update_background()
         all_sprites.draw(screen)
