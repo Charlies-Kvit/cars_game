@@ -1,5 +1,4 @@
 from random import randint, choice
-from easter_game import start_easter_egg
 import pygame
 import os
 import sys
@@ -12,18 +11,6 @@ screen = pygame.display.set_mode(size)
 cars_images = os.listdir('interface/cars')
 y1 = 0
 y2 = -HEIGHT
-
-
-def update_background():
-    global y1, y2
-    screen.blit(road, (0, y1))
-    screen.blit(road, (0, y2))
-    y1 += 5
-    y2 += 5
-    if y1 > HEIGHT:
-        y1 = -HEIGHT
-    if y2 > HEIGHT:
-        y2 = -HEIGHT
 
 
 def load_image(name, colorkey=None):
@@ -40,6 +27,18 @@ def load_image(name, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
+
+def update_background():
+    global y1, y2
+    screen.blit(road, (0, y1))
+    screen.blit(road, (0, y2))
+    y1 += 5
+    y2 += 5
+    if y1 > HEIGHT:
+        y1 = -HEIGHT
+    if y2 > HEIGHT:
+        y2 = -HEIGHT
 
 
 def random_appearence(over_cars):
@@ -63,7 +62,7 @@ def random_appearence(over_cars):
                 kol_vo_sovp += 1
         if kol_vo_sovp == len(over_cars_cords):
             print(x, x + 119)
-            if randint(1, 100) == 0 and easter_flag:
+            if randint(1, 100) != 0 and easter_flag:
                 EasterCar((x, -300), all_sprites, cars_sprites, easter_sprite)
                 easter_flag, flag = False, False
                 continue
@@ -94,7 +93,6 @@ class Xcross(pygame.sprite.Sprite):
     def update(self, pos=None):
         if pos is None:
             return
-        print(pos)
 
 
 class Hero(pygame.sprite.Sprite):
@@ -113,6 +111,7 @@ class Hero(pygame.sprite.Sprite):
         for auto_car in cars_sprites.sprites():
             if pygame.sprite.collide_mask(self, auto_car):
                 if auto_car in easter_sprite:
+                    from easter_game import start_easter_egg
                     start_easter_egg()
                 print('Game over')
                 terminate()
@@ -146,7 +145,7 @@ class Car(pygame.sprite.Sprite):
 
 
 class EasterCar(pygame.sprite.Sprite):
-    image = load_image(os.path.join('easter_car', "easter_car.png"))
+    image = load_image(os.path.join('easter', "easter_car.png"))
 
     def __init__(self, position, *group):
         super().__init__(*group)
