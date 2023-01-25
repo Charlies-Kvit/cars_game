@@ -41,7 +41,7 @@ def update_background():
         y2 = -HEIGHT
 
 
-def random_appearence(over_cars):
+def random_appearence(over_cars, ccc=False):
     global easter_flag
     over_cars_cords = []
     for i in over_cars:
@@ -66,7 +66,14 @@ def random_appearence(over_cars):
                 EasterCar((x, -300), all_sprites, cars_sprites, easter_sprite)
                 easter_flag, flag = False, False
                 continue
-            Car((x, -300), all_sprites, cars_sprites)
+            if ccc:
+                Coin((x, -300), all_sprites, coins_sprites)
+            else:
+                if randint(1, 4) == 4:
+                    print('УРА ГРУЗОВИК!')
+                    Gruzovik((x, -300), all_sprites, cars_sprites)
+                else:
+                    Car((x, -300), all_sprites, cars_sprites)
             flag = False
             break
         else:
@@ -144,6 +151,60 @@ class Car(pygame.sprite.Sprite):
         self.rect = self.rect.move(xu, self.U)
 
 
+class Gruzovik(pygame.sprite.Sprite):
+    def __init__(self, position, *group):
+        super().__init__(*group)
+        self.coin_flag = True
+        self.image = load_image('gruz.png')
+        self.U = randint(10, 15)
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+    
+    
+    def update(self):
+        xu = 0
+        if self.rect.x < 101:
+            xu = 2
+        elif self.rect.x > WIDTH - self.image.get_width() - 101:
+            xu = -2
+        self.rect = self.rect.move(xu, self.U)
+
+
+
+class Coin(pygame.sprite.Sprite):
+    def __init__(self, position, *group):
+        super().__init__(*group)
+        self.coin_flag = True
+        self.image = load_image('coin.png')
+        self.U = 5
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+    
+    
+    def update(self):
+        global kolvo_coins
+        xu = 0
+        if self.rect.x < 101:
+            xu = 2
+        elif self.rect.x > WIDTH - self.image.get_width() - 101:
+            xu = -2
+        self.rect = self.rect.move(xu, self.U)
+
+        for auto_car in hero_sprite.sprites():
+            if pygame.sprite.collide_mask(self, auto_car):
+                coins_sprites.remove(self)
+                all_sprites.remove(self)
+                kolvo_coins += 1
+                print(kolvo_coins)
+        
+        
+        
+
+
 class EasterCar(pygame.sprite.Sprite):
     image = load_image(os.path.join('easter', "easter_car.png"))
 
@@ -158,6 +219,7 @@ class EasterCar(pygame.sprite.Sprite):
 
     def update(self):
         xu = 0
+        
         if self.rect.x < 101:
             xu = 2
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
@@ -172,12 +234,15 @@ if __name__ == '__main__':
     cars_sprites = pygame.sprite.Group()
     xcross_sprite = pygame.sprite.Group()
     easter_sprite = pygame.sprite.Group()
+    coins_sprites = pygame.sprite.Group()
     easter_flag = True
+    kolvo_coins = 0
     clock = pygame.time.Clock()
     running = True
     Hero(all_sprites, hero_sprite), Xcross(all_sprites)
     for i in range(3):
         random_appearence(cars_sprites)
+
     DOWN, UP, LEFT, RIGHT = False, False, False, False
     while running:
         for event in pygame.event.get():
@@ -210,6 +275,9 @@ if __name__ == '__main__':
                 cars_sprites.remove(car)
                 all_sprites.remove(car)
                 random_appearence(cars_sprites)
+                if randint(1, 5) == 2:
+                    random_appearence(cars_sprites, True)
+        
         all_sprites.update()
         update_background()
         all_sprites.draw(screen)
