@@ -70,8 +70,9 @@ def random_appearence(over_cars, ccc=False):
                 Coin((x, -300), all_sprites, coins_sprites)
             else:
                 if randint(1, 4) == 4:
-                    print('УРА ГРУЗОВИК!')
-                    Gruzovik((x, -300), all_sprites, cars_sprites)
+                    pass
+                    # print('УРА ГРУЗОВИК!')
+                    # Gruzovik((x, -300), all_sprites, cars_sprites)
                 else:
                     Car((x, -300), all_sprites, cars_sprites)
             flag = False
@@ -268,7 +269,8 @@ if __name__ == '__main__':
                 cars_sprites.remove(car)
                 all_sprites.remove(car)
                 random_appearence(cars_sprites)
-                if randint(1, 5) == 2:
+                if randint(1, 5) < 10:
+                    print("MONEY!!!")
                     random_appearence(cars_sprites, True)
         all_sprites.update()
         update_background()
