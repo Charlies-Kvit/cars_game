@@ -39,8 +39,8 @@ def update_background():
         y1 = -HEIGHT
     if y2 > HEIGHT:
         y2 = -HEIGHT
-
-
+  
+  
 def random_appearence(over_cars, ccc=False):
     global easter_flag
     over_cars_cords = []
@@ -155,7 +155,7 @@ class Gruzovik(pygame.sprite.Sprite):
     def __init__(self, position, *group):
         super().__init__(*group)
         self.coin_flag = True
-        self.image = load_image('gruz.png')
+        self.image = load_image(os.path.join('cars', 'gruz.png'))
         self.U = randint(10, 15)
         sound1 = pygame.mixer.Sound('interface/gudok.ogg')
         sound1.play()
@@ -163,7 +163,7 @@ class Gruzovik(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
         self.rect.y = position[1]
-    
+        
     def update(self):
         xu = 0
         if self.rect.x < 101:
@@ -238,7 +238,6 @@ if __name__ == '__main__':
     Hero(all_sprites, hero_sprite), Xcross(all_sprites)
     for i in range(3):
         random_appearence(cars_sprites)
-
     DOWN, UP, LEFT, RIGHT = False, False, False, False
     while running:
         for event in pygame.event.get():
@@ -271,7 +270,8 @@ if __name__ == '__main__':
                 cars_sprites.remove(car)
                 all_sprites.remove(car)
                 random_appearence(cars_sprites)
-                if randint(1, 5) == 2:
+                if randint(1, 5) < 10:
+                    print("MONEY!!!")
                     random_appearence(cars_sprites, True)
         all_sprites.update()
         update_background()
