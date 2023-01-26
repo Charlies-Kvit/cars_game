@@ -39,8 +39,8 @@ def update_background():
         y1 = -HEIGHT
     if y2 > HEIGHT:
         y2 = -HEIGHT
-
-
+  
+  
 def random_appearence(over_cars, ccc=False):
     global easter_flag
     over_cars_cords = []
@@ -70,9 +70,8 @@ def random_appearence(over_cars, ccc=False):
                 Coin((x, -300), all_sprites, coins_sprites)
             else:
                 if randint(1, 4) == 4:
-                    pass
-                    # print('УРА ГРУЗОВИК!')
-                    # Gruzovik((x, -300), all_sprites, cars_sprites)
+                    print('УРА ГРУЗОВИК!')
+                    Gruzovik((x, -500), all_sprites, cars_sprites)
                 else:
                     Car((x, -300), all_sprites, cars_sprites)
             flag = False
@@ -158,11 +157,13 @@ class Gruzovik(pygame.sprite.Sprite):
         self.coin_flag = True
         self.image = load_image(os.path.join('cars', 'gruz.png'))
         self.U = randint(10, 15)
+        sound1 = pygame.mixer.Sound('interface/gudok.ogg')
+        sound1.play()
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
         self.rect.y = position[1]
-
+        
     def update(self):
         xu = 0
         if self.rect.x < 101:
