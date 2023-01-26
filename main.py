@@ -71,7 +71,7 @@ def random_appearence(over_cars, ccc=False):
             else:
                 if randint(1, 4) == 4:
                     print('УРА ГРУЗОВИК!')
-                    Gruzovik((x, -300), all_sprites, cars_sprites)
+                    Gruzovik((x, -500), all_sprites, cars_sprites)
                 else:
                     Car((x, -300), all_sprites, cars_sprites)
             flag = False
@@ -164,7 +164,6 @@ class Gruzovik(pygame.sprite.Sprite):
         self.rect.x = position[0]
         self.rect.y = position[1]
     
-    
     def update(self):
         xu = 0
         if self.rect.x < 101:
@@ -172,7 +171,6 @@ class Gruzovik(pygame.sprite.Sprite):
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
             xu = -2
         self.rect = self.rect.move(xu, self.U)
-
 
 
 class Coin(pygame.sprite.Sprite):
@@ -185,8 +183,7 @@ class Coin(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
         self.rect.y = position[1]
-    
-    
+
     def update(self):
         global kolvo_coins
         xu = 0
@@ -203,9 +200,6 @@ class Coin(pygame.sprite.Sprite):
                 kolvo_coins += 1
                 print(kolvo_coins)
         
-        
-        
-
 
 class EasterCar(pygame.sprite.Sprite):
     image = load_image(os.path.join('easter', "easter_car.png"))
@@ -279,7 +273,6 @@ if __name__ == '__main__':
                 random_appearence(cars_sprites)
                 if randint(1, 5) == 2:
                     random_appearence(cars_sprites, True)
-        
         all_sprites.update()
         update_background()
         all_sprites.draw(screen)
