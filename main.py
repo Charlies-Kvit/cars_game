@@ -157,6 +157,8 @@ class Gruzovik(pygame.sprite.Sprite):
         self.coin_flag = True
         self.image = load_image('gruz.png')
         self.U = randint(10, 15)
+        sound1 = pygame.mixer.Sound('interface/gudok.ogg')
+        sound1.play()
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
