@@ -282,3 +282,5 @@ if __name__ == '__main__':
         clock.tick(120)
         pygame.display.flip()
     pygame.quit()
+    with open("logs/logs.txt", "w"):
+        pass
