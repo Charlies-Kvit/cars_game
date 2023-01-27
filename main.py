@@ -119,7 +119,10 @@ class Hero(pygame.sprite.Sprite):
             if pygame.sprite.collide_mask(self, auto_car):
                 if auto_car in easter_sprite:
                     from easter_game import start_easter_egg
+                    pygame.quit()
+                    pygame.init()
                     start_easter_egg()
+                    sys.exit()
                 print('Game over')
                 terminate()
         if UP and self.rect.y > 0:
