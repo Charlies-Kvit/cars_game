@@ -1,13 +1,17 @@
+# ?
 import pygame
 import pytmx
 import sys
 import os
 
+# Объявляем нужные переменные
 size = WIDTH, HEIGHT = 800, 800
 DOWN, UP, LEFT, RIGHT = False, False, False, False
 
 
+# Сердце яйца
 def start_easter_egg():
+    # Объявляем все нужные переменные и загружаем музыку
     global DOWN, UP, LEFT, RIGHT, size
     pygame.init()
     pygame.mixer.music.load(os.path.join("interface", "easter", "sounds", "scare_music.mp3"))
@@ -17,6 +21,7 @@ def start_easter_egg():
     all_sprites = pygame.sprite.Group()
     crying_children = pygame.sprite.Group()
 
+    # Загружает изображения для спрайтов
     def load_image(name, colorkey=None):
         fullname = os.path.join('interface', name)
         if not os.path.isfile(fullname):
@@ -32,6 +37,7 @@ def start_easter_egg():
             image = image.convert_alpha()
         return image
 
+    # Какой еще... Просто спрайт
     class CryingBaby(pygame.sprite.Sprite):
         image = load_image(os.path.join("easter", "easter_cry_child.png"))
 
@@ -42,6 +48,7 @@ def start_easter_egg():
             self.rect.x = cords[0]
             self.rect.y = cords[1]
 
+    # Спрайт нашего игрока
     class Hero(pygame.sprite.Sprite):
         image = load_image(os.path.join('easter', "easter_hero.png"))
 

@@ -1,16 +1,21 @@
+# Импортируем нужные библиотеки
 from random import randint, choice
 import pygame
 import os
 import sys
 
-road = pygame.image.load('interface/road.png')
+# Загружаем и объявляем все нужные переменные
 pygame.init()
+road = pygame.image.load('interface/road.png')
 pygame.display.set_caption('')
 size = WIDTH, HEIGHT = road.get_size()
 screen = pygame.display.set_mode(size)
-cars_images = os.listdir('interface/cars')
+cars_images = [file for file in os.listdir('interface/cars') if file[file.rfind('.'):] == ".png"]
 y1 = 0
 y2 = -HEIGHT
+
+
+# Загружает изображение
 
 
 def load_image(name, colorkey=None):
@@ -29,6 +34,9 @@ def load_image(name, colorkey=None):
     return image
 
 
+# Анимация дороги
+
+
 def update_background():
     global y1, y2
     screen.blit(road, (0, y1))
@@ -39,29 +47,30 @@ def update_background():
         y1 = -HEIGHT
     if y2 > HEIGHT:
         y2 = -HEIGHT
-  
-  
+
+
+# Создает на пути машинки и монеты
+
+
 def random_appearence(over_cars, ccc=False):
     global easter_flag
     over_cars_cords = []
     for i in over_cars:
         if i.rect.topleft[1] <= 520:
             over_cars_cords.append((i.rect.topleft[0], i.rect.topright[0]))
-    print(over_cars_cords)
     # thirst, second, third = range(0, 233), range(234, 466), range(467, 700)
     asd = 0
     flag = True
     while flag:
         x = randint(100, WIDTH - 229)
         asd += 1
-        with open('logs/logs.txt', 'a') as w:
+        with open('config/logs.txt', 'a') as w:
             w.write(str(x) + ' ' + str(asd) + '\n')
         kol_vo_sovp = 0
         for i in over_cars_cords:
             if x not in range(i[0], i[1] + 1) and x + 120 not in range(i[0], i[1] + 1):
                 kol_vo_sovp += 1
         if kol_vo_sovp == len(over_cars_cords):
-            print(x, x + 119)
             if randint(1, 100) != 0 and easter_flag:
                 EasterCar((x, -300), all_sprites, cars_sprites, easter_sprite)
                 easter_flag, flag = False, False
@@ -70,7 +79,6 @@ def random_appearence(over_cars, ccc=False):
                 Coin((x, -300), all_sprites, coins_sprites)
             else:
                 if randint(1, 4) == 4:
-                    print('УРА ГРУЗОВИК!')
                     Gruzovik((x, -500), all_sprites, cars_sprites)
                 else:
                     Car((x, -300), all_sprites, cars_sprites)
@@ -80,9 +88,17 @@ def random_appearence(over_cars, ccc=False):
             kol_vo_sovp = 0
 
 
+# Убивает все процессы напрочь
+
+
 def terminate():
+    with open("config/logs.txt", "w"):
+        pass
     pygame.quit()
     sys.exit()
+
+
+# Работает как крестик - нажал на него - закрыл окно
 
 
 class Xcross(pygame.sprite.Sprite):
@@ -93,13 +109,16 @@ class Xcross(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, pygame.Color("red"),
                            (10, 10), 10)
         self.rect = self.image.get_rect()
-        print(self.rect)
         self.rect.centerx = WIDTH - 15
         self.rect.centery = 55
 
-    def update(self, pos=None):
-        if pos is None:
-            return
+    def update(self, flag=False):
+        global cursor
+        if pygame.sprite.collide_mask(self, cursor) and flag:
+            terminate()
+
+
+# Самый главный спрайт - спрайт игрока
 
 
 class Hero(pygame.sprite.Sprite):
@@ -115,6 +134,7 @@ class Hero(pygame.sprite.Sprite):
 
     def update(self):
         global UP, DOWN, RIGHT, LEFT
+        # Смотрим, врезался ли герой в какую-нибудь машинку
         for auto_car in cars_sprites.sprites():
             if pygame.sprite.collide_mask(self, auto_car):
                 if auto_car in easter_sprite:
@@ -125,6 +145,7 @@ class Hero(pygame.sprite.Sprite):
                     sys.exit()
                 print('Game over')
                 terminate()
+        # Иначе смотрим, куда поедет наш спрайт
         if UP and self.rect.y > 0:
             self.rect = self.rect.move(0, -self.U)
         if DOWN and self.rect.y < HEIGHT - self.image.get_height():
@@ -133,6 +154,9 @@ class Hero(pygame.sprite.Sprite):
             self.rect = self.rect.move(-self.U, 0)
         if RIGHT and self.rect.x < WIDTH - self.image.get_width() - 101:
             self.rect = self.rect.move(self.U, 0)
+
+
+# Спрайт машинок, которые появляются на пути
 
 
 class Car(pygame.sprite.Sprite):
@@ -146,6 +170,7 @@ class Car(pygame.sprite.Sprite):
         self.rect.y = position[1]
 
     def update(self):
+        # Если машинка выезжает за пределы дороги - толкаем ее обратно
         xu = 0
         if self.rect.x < 101:
             xu = 2
@@ -154,13 +179,16 @@ class Car(pygame.sprite.Sprite):
         self.rect = self.rect.move(xu, self.U)
 
 
+# Спрайт грузовика - в основном, как машинка, только с гудком
+
+
 class Gruzovik(pygame.sprite.Sprite):
     def __init__(self, position, *group):
         super().__init__(*group)
         self.coin_flag = True
-        self.image = load_image(os.path.join('cars', 'gruz.png'))
+        self.image = load_image(os.path.join('cars', 'special', 'gruz.png'))
         self.U = randint(10, 15)
-        sound1 = pygame.mixer.Sound('interface/gudok.ogg')
+        sound1 = pygame.mixer.Sound('interface/cars/sounds/gudok.ogg')
         sound1.play()
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
@@ -174,6 +202,9 @@ class Gruzovik(pygame.sprite.Sprite):
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
             xu = -2
         self.rect = self.rect.move(xu, self.U)
+
+
+# Те самые монетки)
 
 
 class Coin(pygame.sprite.Sprite):
@@ -195,15 +226,30 @@ class Coin(pygame.sprite.Sprite):
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
             xu = -2
         self.rect = self.rect.move(xu, self.U)
-
         for auto_car in hero_sprite.sprites():
             if pygame.sprite.collide_mask(self, auto_car):
                 coins_sprites.remove(self)
                 all_sprites.remove(self)
                 kolvo_coins += 1
-                print(kolvo_coins)
+
+
+# Кастомизированный курсор
+
+
+class Cursor(pygame.sprite.Sprite):
+    image = load_image("cursor.png")
+
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.image = Cursor.image
+        self.rect = self.image.get_rect()
+
+    def update(self, position=None):
+        if position is not None:
+            self.rect.topleft = position
         
 
+# ?
 class EasterCar(pygame.sprite.Sprite):
     image = load_image(os.path.join('easter', "easter_car.png"))
 
@@ -218,7 +264,6 @@ class EasterCar(pygame.sprite.Sprite):
 
     def update(self):
         xu = 0
-        
         if self.rect.x < 101:
             xu = 2
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
@@ -226,22 +271,31 @@ class EasterCar(pygame.sprite.Sprite):
         self.rect = self.rect.move(xu, self.U)
 
 
+# Сердце игры - обработка событий
 if __name__ == '__main__':
+    pygame.mouse.set_visible(False)
+    # Загружаем фоновую музыку
+    pygame.mixer.music.load(os.path.join("interface/music/background-music.mp3"))
+    pygame.mixer.music.play()
+    # Создаем нужные группы спрайтов
     all_sprites = pygame.sprite.Group()
     hero_sprite = pygame.sprite.Group()
-    road_sprite = pygame.sprite.Group()
     cars_sprites = pygame.sprite.Group()
     xcross_sprite = pygame.sprite.Group()
     easter_sprite = pygame.sprite.Group()
     coins_sprites = pygame.sprite.Group()
+    # ?
     easter_flag = True
+    # Объявляем нужные переменные и создаем все нужные спрайты
     kolvo_coins = 0
     clock = pygame.time.Clock()
     running = True
-    Hero(all_sprites, hero_sprite), Xcross(all_sprites)
+    cursor = Cursor(all_sprites)
+    Hero(all_sprites, hero_sprite), Xcross(all_sprites, xcross_sprite)
     for i in range(3):
         random_appearence(cars_sprites)
     DOWN, UP, LEFT, RIGHT = False, False, False, False
+    # Ну а теперь обработка событий - на что нажал пользователь, куда и т.д.
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -267,20 +321,19 @@ if __name__ == '__main__':
                 if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     RIGHT = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                xcross_sprite.update(event.pos)
+                xcross_sprite.update(True)
+            if event.type == pygame.MOUSEMOTION:
+                cursor.update(event.pos)
         for car in cars_sprites:
             if car.rect.y >= HEIGHT:
                 cars_sprites.remove(car)
                 all_sprites.remove(car)
                 random_appearence(cars_sprites)
                 if randint(1, 5) < 10:
-                    print("MONEY!!!")
                     random_appearence(cars_sprites, True)
         all_sprites.update()
         update_background()
         all_sprites.draw(screen)
         clock.tick(120)
         pygame.display.flip()
-    pygame.quit()
-    with open("logs/logs.txt", "w"):
-        pass
+    terminate()

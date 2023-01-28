@@ -45,9 +45,9 @@
     ],
     "project": "map.tiled-project",
     "recentFiles": [
-        "easter_map.tmx",
         "main.tsx",
         "FFF.tsx",
+        "easter_map.tmx",
         "Основной.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
