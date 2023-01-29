@@ -34,6 +34,41 @@ def load_image(name, colorkey=None):
     return image
 
 
+# Экран конца игры
+
+
+def game_over():
+    global WIDTH, HEIGHT, screen, died_sound, hero
+    pygame.mouse.set_visible(True)
+    for sprite in cars_sprites.sprites():
+        all_sprites.remove(sprite)
+        cars_sprites.remove(sprite)
+        if sprite in easter_sprite.sprites():
+            easter_sprite.remove(sprite)
+    coins_sprites.clear(screen, screen)
+    pygame.mixer.music.stop()
+    died_sound.play()
+    screen.fill((0, 0, 0))
+    font = pygame.font.Font(None, 50)
+    text = font.render("ВЫ ПОГИБЛИ!", True, "red")
+    text_x = WIDTH // 2 - text.get_width() // 2
+    text_y = HEIGHT // 2 - text.get_height() // 2
+    text_w = text.get_width()
+    text_h = text.get_height()
+    screen.blit(text, (text_x, text_y))
+    pygame.draw.rect(screen, "red", (text_x - 10, text_y - 10,
+                                           text_w + 20, text_h + 20), 1)
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN:
+                running = False
+        pygame.display.flip()
+    main()
+
+
 # Анимация дороги
 
 
@@ -133,7 +168,7 @@ class Hero(pygame.sprite.Sprite):
         self.rect.centery = HEIGHT / 4 * 3 - 15
 
     def update(self):
-        global UP, DOWN, RIGHT, LEFT
+        global UP, DOWN, RIGHT, LEFT, running
         # Смотрим, врезался ли герой в какую-нибудь машинку
         for auto_car in cars_sprites.sprites():
             if pygame.sprite.collide_mask(self, auto_car):
@@ -143,8 +178,9 @@ class Hero(pygame.sprite.Sprite):
                     pygame.init()
                     start_easter_egg()
                     sys.exit()
-                print('Game over')
-                terminate()
+                running = False
+                game_over()
+                # terminate()
         # Иначе смотрим, куда поедет наш спрайт
         if UP and self.rect.y > 0:
             self.rect = self.rect.move(0, -self.U)
@@ -154,6 +190,10 @@ class Hero(pygame.sprite.Sprite):
             self.rect = self.rect.move(-self.U, 0)
         if RIGHT and self.rect.x < WIDTH - self.image.get_width() - 101:
             self.rect = self.rect.move(self.U, 0)
+
+    def restart_hero(self):
+        self.rect.centerx = WIDTH / 2 - 15
+        self.rect.centery = HEIGHT / 4 * 3 - 15
 
 
 # Спрайт машинок, которые появляются на пути
@@ -219,18 +259,17 @@ class Coin(pygame.sprite.Sprite):
         self.rect.y = position[1]
 
     def update(self):
-        global kolvo_coins
+        global kolvo_coins, hero
         xu = 0
         if self.rect.x < 101:
             xu = 2
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
             xu = -2
         self.rect = self.rect.move(xu, self.U)
-        for auto_car in hero_sprite.sprites():
-            if pygame.sprite.collide_mask(self, auto_car):
-                coins_sprites.remove(self)
-                all_sprites.remove(self)
-                kolvo_coins += 1
+        if pygame.sprite.collide_mask(self, hero):
+            coins_sprites.remove(self)
+            all_sprites.remove(self)
+            kolvo_coins += 1
 
 
 # Кастомизированный курсор
@@ -272,34 +311,24 @@ class EasterCar(pygame.sprite.Sprite):
 
 
 # Сердце игры - обработка событий
-if __name__ == '__main__':
+
+
+def main():
+    global DOWN, UP, LEFT, RIGHT
+    hero.restart_hero()
     pygame.mouse.set_visible(False)
-    # Загружаем фоновую музыку
-    pygame.mixer.music.load(os.path.join("interface/music/background-music.mp3"))
+    died_sound.stop()
     pygame.mixer.music.play()
-    # Создаем нужные группы спрайтов
-    all_sprites = pygame.sprite.Group()
-    hero_sprite = pygame.sprite.Group()
-    cars_sprites = pygame.sprite.Group()
-    xcross_sprite = pygame.sprite.Group()
-    easter_sprite = pygame.sprite.Group()
-    coins_sprites = pygame.sprite.Group()
-    # ?
-    easter_flag = True
-    # Объявляем нужные переменные и создаем все нужные спрайты
-    kolvo_coins = 0
-    clock = pygame.time.Clock()
     running = True
-    cursor = Cursor(all_sprites)
-    Hero(all_sprites, hero_sprite), Xcross(all_sprites, xcross_sprite)
+    DOWN, UP, LEFT, RIGHT = False, False, False, False
     for i in range(3):
         random_appearence(cars_sprites)
-    DOWN, UP, LEFT, RIGHT = False, False, False, False
     # Ну а теперь обработка событий - на что нажал пользователь, куда и т.д.
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                terminate()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w or event.key == pygame.K_UP:
                     UP = True
@@ -311,6 +340,7 @@ if __name__ == '__main__':
                     RIGHT = True
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                    terminate()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_w or event.key == pygame.K_UP:
                     UP = False
@@ -321,7 +351,7 @@ if __name__ == '__main__':
                 if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     RIGHT = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                xcross_sprite.update(True)
+                xcross.update(True)
             if event.type == pygame.MOUSEMOTION:
                 cursor.update(event.pos)
         for car in cars_sprites:
@@ -336,4 +366,27 @@ if __name__ == '__main__':
         all_sprites.draw(screen)
         clock.tick(120)
         pygame.display.flip()
-    terminate()
+    if game_over_flag:
+        game_over()
+
+
+if __name__ == '__main__':
+    # Загружаем фоновую музыку и звуки
+    died_sound = pygame.mixer.Sound(os.path.join("interface", "game_sounds", "died_sound.mp3"))
+    pygame.mixer.music.load(os.path.join("interface/game_sounds/background-music.mp3"))
+    # Создаем нужные группы спрайтов
+    all_sprites = pygame.sprite.Group()
+    cars_sprites = pygame.sprite.Group()
+    easter_sprite = pygame.sprite.Group()
+    coins_sprites = pygame.sprite.Group()
+    # ?
+    easter_flag = True
+    # Объявляем нужные переменные и создаем все нужные спрайты
+    DOWN, UP, LEFT, RIGHT = False, False, False, False
+    kolvo_coins = 0
+    clock = pygame.time.Clock()
+    hero = Hero(all_sprites)
+    game_over_flag = False
+    cursor = Cursor(all_sprites)
+    xcross = Xcross(all_sprites)
+    main()
