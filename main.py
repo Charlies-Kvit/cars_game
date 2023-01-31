@@ -229,7 +229,7 @@ class Gruzovik(pygame.sprite.Sprite):
         super().__init__(*group)
         self.coin_flag = True
         self.image = load_image(os.path.join('cars', 'special', 'gruz.png'))
-        self.U = randint(16, 24)
+        self.U = randint(13, 20)
         sound1 = pygame.mixer.Sound('interface/cars/sounds/gudok.ogg')
         sound1.play()
         self.rect = self.image.get_rect()
