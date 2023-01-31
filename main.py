@@ -7,13 +7,15 @@ import sys
 # Загружаем и объявляем все нужные переменные
 pygame.init()
 road = pygame.image.load('interface/road.png')
-pygame.display.set_caption('')
+pygame.display.set_caption('Сars Game')
 size = WIDTH, HEIGHT = road.get_size()
 screen = pygame.display.set_mode(size)
 cars_images = [file for file in os.listdir('interface/cars') if file[file.rfind('.'):] == ".png"]
 y1 = 0
 y2 = -HEIGHT
-
+kolvo_coins = 0
+with open('config/logs.txt', 'a') as w:
+    w.write('-----------Новая сессия------------\n')
 
 # Загружает изображение
 
@@ -38,7 +40,8 @@ def load_image(name, colorkey=None):
 
 
 def game_over():
-    global WIDTH, HEIGHT, screen, died_sound, hero
+    global WIDTH, HEIGHT, screen, died_sound, hero, kolvo_coins
+    kolvo_coins = 0
     pygame.mouse.set_visible(True)
     for sprite in cars_sprites.sprites():
         all_sprites.remove(sprite)
@@ -51,8 +54,8 @@ def game_over():
     screen.fill((0, 0, 0))
     font = pygame.font.Font(None, 50)
     text = font.render("ВЫ ПОГИБЛИ!", True, "red")
-    text_x = WIDTH // 2 - text.get_width() // 2
-    text_y = HEIGHT // 2 - text.get_height() // 2
+    text_x = HEIGHT // 2 - text.get_height() // 2
+    text_y = WIDTH // 2 - text.get_height() // 2
     text_w = text.get_width()
     text_h = text.get_height()
     screen.blit(text, (text_x, text_y))
@@ -91,8 +94,7 @@ def random_appearence(over_cars, ccc=False):
     global easter_flag
     over_cars_cords = []
     for i in over_cars:
-        if i.rect.topleft[1] <= 520:
-            over_cars_cords.append((i.rect.topleft[0], i.rect.topright[0]))
+        over_cars_cords.append((i.rect.topleft[0], i.rect.topright[0]))
     # thirst, second, third = range(0, 233), range(234, 466), range(467, 700)
     asd = 0
     flag = True
@@ -106,7 +108,7 @@ def random_appearence(over_cars, ccc=False):
             if x not in range(i[0], i[1] + 1) and x + 120 not in range(i[0], i[1] + 1):
                 kol_vo_sovp += 1
         if kol_vo_sovp == len(over_cars_cords):
-            if randint(1, 100) != 0 and easter_flag:
+            if randint(1, 100) == 50 and easter_flag:
                 EasterCar((x, -300), all_sprites, cars_sprites, easter_sprite)
                 easter_flag, flag = False, False
                 continue
@@ -163,7 +165,7 @@ class Hero(pygame.sprite.Sprite):
         super().__init__(*group)
         self.image = Hero.image
         self.rect = self.image.get_rect()
-        self.U = 6
+        self.U = 8
         self.rect.centerx = WIDTH / 2 - 15
         self.rect.centery = HEIGHT / 4 * 3 - 15
 
@@ -203,7 +205,7 @@ class Car(pygame.sprite.Sprite):
     def __init__(self, position, *group):
         super().__init__(*group)
         self.image = load_image(os.path.join('cars', choice(cars_images)))
-        self.U = randint(5, 10)
+        self.U = randint(7, 12)
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
@@ -219,7 +221,7 @@ class Car(pygame.sprite.Sprite):
         self.rect = self.rect.move(xu, self.U)
 
 
-# Спрайт грузовика - в основном, как машинка, только с гудком
+# Спрайт грузовика - в основном, как машинка, только с гудком и большой скоростью 
 
 
 class Gruzovik(pygame.sprite.Sprite):
@@ -227,7 +229,7 @@ class Gruzovik(pygame.sprite.Sprite):
         super().__init__(*group)
         self.coin_flag = True
         self.image = load_image(os.path.join('cars', 'special', 'gruz.png'))
-        self.U = randint(10, 15)
+        self.U = randint(16, 24)
         sound1 = pygame.mixer.Sound('interface/cars/sounds/gudok.ogg')
         sound1.play()
         self.rect = self.image.get_rect()
@@ -257,6 +259,7 @@ class Coin(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
         self.rect.y = position[1]
+        
 
     def update(self):
         global kolvo_coins, hero
@@ -270,6 +273,31 @@ class Coin(pygame.sprite.Sprite):
             coins_sprites.remove(self)
             all_sprites.remove(self)
             kolvo_coins += 1
+            
+        
+
+
+class Scoreboard(pygame.sprite.Sprite):
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.coin_flag = True
+        self.image = pygame.Surface((100, 100))
+        self.rect = pygame.Rect(4, 200, 100, 100)
+        # pygame.draw.rect(self.image, (255, 255, 255), self.rect, 100, 2)
+        
+        
+    def update(self):
+        f1 = pygame.font.Font('interface/fonts/static/Unbounded-Black.ttf', 16)
+        f2 = pygame.font.Font('interface/fonts/static/Unbounded-Bold.ttf', 36)
+        self.image.fill((0, 0, 0))
+        text1 = f1.render(f'MOHET:', True,
+                          'red')
+        text2 = f2.render(str(kolvo_coins), True,
+                          'red')
+        self.image.blit(text1, (1, 1))
+        self.image.blit(text2, (40, 40))
+    
+        
 
 
 # Кастомизированный курсор
@@ -308,6 +336,8 @@ class EasterCar(pygame.sprite.Sprite):
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
             xu = -2
         self.rect = self.rect.move(xu, self.U)
+        
+
 
 
 # Сердце игры - обработка событий
@@ -321,8 +351,9 @@ def main():
     pygame.mixer.music.play()
     running = True
     DOWN, UP, LEFT, RIGHT = False, False, False, False
-    for i in range(3):
+    for _ in range(3):
         random_appearence(cars_sprites)
+    
     # Ну а теперь обработка событий - на что нажал пользователь, куда и т.д.
     while running:
         for event in pygame.event.get():
@@ -359,10 +390,11 @@ def main():
                 cars_sprites.remove(car)
                 all_sprites.remove(car)
                 random_appearence(cars_sprites)
-                if randint(1, 5) < 10:
+                if randint(1, 5) == 1:
                     random_appearence(cars_sprites, True)
-        all_sprites.update()
+        
         update_background()
+        all_sprites.update()
         all_sprites.draw(screen)
         clock.tick(120)
         pygame.display.flip()
@@ -383,8 +415,9 @@ if __name__ == '__main__':
     easter_flag = True
     # Объявляем нужные переменные и создаем все нужные спрайты
     DOWN, UP, LEFT, RIGHT = False, False, False, False
-    kolvo_coins = 0
+    
     clock = pygame.time.Clock()
+    scoreboard = Scoreboard(all_sprites)
     hero = Hero(all_sprites)
     game_over_flag = False
     cursor = Cursor(all_sprites)
