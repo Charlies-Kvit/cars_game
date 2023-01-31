@@ -115,7 +115,7 @@ def random_appearence(over_cars, ccc=False):
             if ccc:
                 Coin((x, -300), all_sprites, coins_sprites)
             else:
-                if randint(1, 4) == 4:
+                if randint(1, 6) == 4:
                     Gruzovik((x, -500), all_sprites, cars_sprites)
                 else:
                     Car((x, -300), all_sprites, cars_sprites)
