@@ -14,7 +14,7 @@ cars_images = [file for file in os.listdir('interface/cars') if file[file.rfind(
 y1 = 0
 y2 = -HEIGHT
 kolvo_coins = 0
-with open('config/logs.txt', 'a') as w:
+with open('config/logs.txt', 'a', encoding='utf-8') as w:
     w.write('-----------Новая сессия------------\n')
 
 # Загружает изображение
@@ -342,7 +342,7 @@ def main():
     hero.restart_hero()
     pygame.mouse.set_visible(False)
     died_sound.stop()
-    pygame.mixer.music.play()
+    pygame.mixer.music.play(-1)
     running = True
     DOWN, UP, LEFT, RIGHT = False, False, False, False
     for _ in range(3):
