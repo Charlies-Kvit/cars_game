@@ -60,7 +60,7 @@ def game_over():
     text_h = text.get_height()
     screen.blit(text, (text_x, text_y))
     pygame.draw.rect(screen, "red", (text_x - 10, text_y - 10,
-                                           text_w + 20, text_h + 20), 1)
+                                     text_w + 20, text_h + 20), 1)
     running = True
     while running:
         for event in pygame.event.get():
@@ -259,7 +259,6 @@ class Coin(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
         self.rect.y = position[1]
-        
 
     def update(self):
         global kolvo_coins, hero
@@ -274,8 +273,6 @@ class Coin(pygame.sprite.Sprite):
             all_sprites.remove(self)
             kolvo_coins += 1
             
-        
-
 
 class Scoreboard(pygame.sprite.Sprite):
     def __init__(self, *group):
@@ -284,8 +281,7 @@ class Scoreboard(pygame.sprite.Sprite):
         self.image = pygame.Surface((100, 100))
         self.rect = pygame.Rect(4, 200, 100, 100)
         # pygame.draw.rect(self.image, (255, 255, 255), self.rect, 100, 2)
-        
-        
+
     def update(self):
         f1 = pygame.font.Font('interface/fonts/static/Unbounded-Black.ttf', 16)
         f2 = pygame.font.Font('interface/fonts/static/Unbounded-Bold.ttf', 36)
@@ -297,8 +293,6 @@ class Scoreboard(pygame.sprite.Sprite):
         self.image.blit(text1, (1, 1))
         self.image.blit(text2, (40, 40))
     
-        
-
 
 # Кастомизированный курсор
 
