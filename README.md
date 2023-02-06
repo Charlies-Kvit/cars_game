@@ -1,7 +1,15 @@
-# cars_game
-## Hello everybody! Welcome!
-### Brief instructions:
-1. w, a, s, d and arrows forward, left, backward, right accordingly
-2. esc and click on the red circle - exit
-That's all for now. We are working on a project!
-P.S. Turn off the antivirus, otherwise our game will be banned (
+# cars game
+## Содержание:
+1. Описание
+2. Установка
+3. Управление
+4. Контакты
+## Описание
+Cars game(или карс гамес) - это аркадная игра, где вам предстоит уварачиваться от машинок и собирать монетки.
+## Установка
+Здесь будет ссылка на гугл диск с exe файлом(не забудьте вырубить антивирус)
+## Управление
+w, a, s, d и стрелки - вперед, влево, назад и вправо соответственно
+esc - выход
+# Контакы
+По жалобам пишите РОМЕ
