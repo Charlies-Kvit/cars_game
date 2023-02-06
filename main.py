@@ -330,8 +330,6 @@ class EasterCar(pygame.sprite.Sprite):
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
             xu = -2
         self.rect = self.rect.move(xu, self.U)
-        
-
 
 
 # Сердце игры - обработка событий
@@ -409,7 +407,6 @@ if __name__ == '__main__':
     easter_flag = True
     # Объявляем нужные переменные и создаем все нужные спрайты
     DOWN, UP, LEFT, RIGHT = False, False, False, False
-    
     clock = pygame.time.Clock()
     scoreboard = Scoreboard(all_sprites)
     hero = Hero(all_sprites)
