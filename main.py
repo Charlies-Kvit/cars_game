@@ -3,6 +3,7 @@ from random import randint, choice
 import pygame
 import os
 import sys
+import sqlite3
 
 # Загружаем и объявляем все нужные переменные
 pygame.init()
@@ -13,7 +14,6 @@ screen = pygame.display.set_mode(size)
 cars_images = [file for file in os.listdir('interface/cars') if file[file.rfind('.'):] == ".png"]
 y1 = 0
 y2 = -HEIGHT
-kolvo_coins = 0
 with open('config/logs.txt', 'a', encoding='utf-8') as w:
     w.write('-----------Новая сессия------------\n')
 
@@ -41,7 +41,11 @@ def load_image(name, colorkey=None):
 
 def game_over():
     global WIDTH, HEIGHT, screen, died_sound, hero, kolvo_coins
-    kolvo_coins = 0
+    con = sqlite3.connect(r"./config/data_base.db3")
+    cur = con.cursor()
+    cur.execute(f"UPDATE Player_records SET number_of_points = '{kolvo_coins}'")
+    con.commit()
+    cur.close()
     pygame.mouse.set_visible(True)
     for sprite in cars_sprites.sprites():
         all_sprites.remove(sprite)
@@ -129,6 +133,11 @@ def random_appearence(over_cars, ccc=False):
 
 
 def terminate():
+    con = sqlite3.connect(r"./config/data_base.db3")
+    cur = con.cursor()
+    cur.execute(f"UPDATE Player_records SET number_of_points = '{kolvo_coins}'")
+    con.commit()
+    cur.close()
     with open("config/logs.txt", "w"):
         pass
     pygame.quit()
@@ -274,6 +283,14 @@ class Coin(pygame.sprite.Sprite):
             kolvo_coins += 1
             
 
+def load_coins():
+    global kolvo_coins
+    con = sqlite3.connect(r"./config/data_base.db3")
+    cur = con.cursor()
+    kolvo_coins = cur.execute('SELECT number_of_points FROM Player_records').fetchone()[0]
+    cur.close()
+
+
 class Scoreboard(pygame.sprite.Sprite):
     def __init__(self, *group):
         super().__init__(*group)
@@ -341,6 +358,7 @@ def main():
     pygame.mouse.set_visible(False)
     died_sound.stop()
     pygame.mixer.music.play(-1)
+    load_coins()
     running = True
     DOWN, UP, LEFT, RIGHT = False, False, False, False
     for _ in range(3):
