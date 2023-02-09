@@ -205,6 +205,9 @@ class Hero(pygame.sprite.Sprite):
                 hp_sprites.remove(hp_sprites.sprites()[-1])
                 all_sprites.remove(auto_car)
                 cars_sprites.remove(auto_car)
+                boom_sound = pygame.mixer.Sound(os.path.join("interface", "game_sounds", "boom.mp3"))
+                boom_sound.play()
+                random_appearence(cars_sprites)
                 if hp == 0:
                     running = False
                     game_over()
@@ -371,6 +374,7 @@ class EasterCar(pygame.sprite.Sprite):
 
 def main():
     global DOWN, UP, LEFT, RIGHT, hp
+    hp = 3
     hero.restart_hero()
     pygame.mouse.set_visible(False)
     died_sound.stop()
