@@ -128,7 +128,6 @@ def start_easter_egg():
             except Exception:
                 os.system(f"mpv {self.path}")
 
-
     class Movie_MP4(Video):
         type = "MP4"
 
@@ -136,7 +135,7 @@ def start_easter_egg():
         if flag:
             path = os.path.join("interface", "easter", "MICHAEL.mp4")
         else:
-            path = os.path.join("interface", "easter", "Are_you_sure_it's_not_your_fault.mp4")
+            path = os.path.join("interface", "easter", "Are_you_sure_it_is_not_your_fault.mp4")
         movie = Movie_MP4(path)
         movie.play()
 
