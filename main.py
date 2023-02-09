@@ -802,7 +802,6 @@ def main():
                     RIGHT = True
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                    terminate()
             if event.type == pygame.KEYUP:
                 if event.key == get_key(custom_keys[0]):
                     UP = False
@@ -828,14 +827,11 @@ def main():
                 random_appearence(cars_sprites)
                 if randint(1, 5) == 1:
                     random_appearence(cars_sprites, True)
-
         update_background()
         all_sprites.update()
         all_sprites.draw(screen)
         clock.tick(FPS)
         pygame.display.flip()
-    if game_over_flag:
-        game_over()
 
 
 if __name__ == '__main__':
