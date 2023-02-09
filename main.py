@@ -832,6 +832,7 @@ def main():
         all_sprites.draw(screen)
         clock.tick(FPS)
         pygame.display.flip()
+    terminate()
 
 
 if __name__ == '__main__':
