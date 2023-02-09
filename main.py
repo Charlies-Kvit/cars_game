@@ -29,6 +29,8 @@ died_sound = pygame.mixer.Sound(os.path.join("interface", "game_sounds", "died_s
 died_sound.set_volume(0.5)
 sound1 = pygame.mixer.Sound('interface/cars/sounds/gudok.ogg')
 sound1.set_volume(0.5)
+boom_sound = pygame.mixer.Sound(os.path.join("interface", "game_sounds", "boom.mp3"))
+boom_sound.set_volume(0.5)
 pygame.mixer.music.load(os.path.join("interface/game_sounds/background-music.mp3"))
 pygame.mixer.music.set_volume(0.5)
 
@@ -183,6 +185,7 @@ class Settings:
                         pygame.mixer.music.set_volume(value)
                         died_sound.set_volume(value)
                         sound1.set_volume(value)
+                        boom_sound.set_volume(value)
 
                     elif event.type == pygame.KEYDOWN and \
                             event.key == pygame.K_DOWN and value >= 0:
@@ -190,6 +193,7 @@ class Settings:
                         pygame.mixer.music.set_volume(value)
                         died_sound.set_volume(value)
                         sound1.set_volume(value)
+                        boom_sound.set_volume(value)
 
                 if 38 <= mouse_pos[0] <= 1036 and 290 <= mouse_pos[1] <= 362:
                     if event.type == pygame.KEYDOWN and \
@@ -208,12 +212,14 @@ class Settings:
                         sound_value += 0.1
                         died_sound.set_volume(sound_value)
                         sound1.set_volume(sound_value)
+                        boom_sound.set_volume(sound_value)
 
                     elif event.type == pygame.KEYDOWN and \
                             event.key == pygame.K_DOWN and music_value >= 0:
                         sound_value -= 0.1
                         died_sound.set_volume(sound_value)
                         sound1.set_volume(sound_value)
+                        boom_sound.set_volume(sound_value)
 
             self.buttons.draw(screen)
             pygame.display.flip()
@@ -518,7 +524,6 @@ class Hero(pygame.sprite.Sprite):
                 hp_sprites.remove(hp_sprites.sprites()[-1])
                 all_sprites.remove(auto_car)
                 cars_sprites.remove(auto_car)
-                boom_sound = pygame.mixer.Sound(os.path.join("interface", "game_sounds", "boom.mp3"))
                 boom_sound.play()
                 random_appearence(cars_sprites)
                 if hp == 0:
