@@ -48,7 +48,7 @@ keys = {49: '1', 50: '2', 51: '3', 52: '4', 53: '5',
 with open('config/logs.txt', 'a', encoding='utf-8') as w:
     w.write('-----------Новая сессия------------\n')
 
-    
+
 # Загружает изображение
 
 
@@ -77,7 +77,7 @@ def main_menu():
     start_game = MenuElement(538, 350, 'main_menu/start_game.png', main_menu_sprites)
     settings = MenuElement(538, 450, 'main_menu/settings.png', main_menu_sprites)
     quit_game = MenuElement(538, 555, 'main_menu/quit.png', main_menu_sprites)
-    
+
     bg = load_image('main_menu/main_menu_bg.png')
     screen.blit(bg, (0, 0))
     while True:
@@ -119,8 +119,8 @@ class MenuElement(pygame.sprite.Sprite):
             pygame.draw.rect(screen, (160, 160, 160), self.rect, 0)
         else:
             pygame.draw.rect(screen, (126, 109, 97), self.rect, 0)
-            
-            
+
+
 # Настройки
 
 
@@ -343,8 +343,8 @@ class Settings:
 
 def open_settings():
     Settings()
-        
-        
+
+
 # Экран конца игры
 
 
@@ -456,14 +456,14 @@ def terminate():
 
 
 class HitPoints(pygame.sprite.Sprite):
-     def __init__(self, position, *group):
+    def __init__(self, position, *group):
         super().__init__(*group)
         self.image = load_image('heart.png')
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.centerx = position[0]
         self.rect.centery = position[1]
-        
+
 
 # Работает как крестик - нажал на него - закрыл окно
 
@@ -591,7 +591,7 @@ class Gruzovik(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = position[0]
         self.rect.y = position[1]
-        
+
     def update(self):
         xu = 0
         if self.rect.x < 101:
@@ -620,12 +620,12 @@ class Coin(pygame.sprite.Sprite):
 
     def update(self):
         global kolvo_coins, hero
-        
+
         if mode == 'normal':
             self.image = load_image('coin.png')
         else:
             self.image = load_image('coin_pixel.png')
-        
+
         xu = 0
         if self.rect.x < 101:
             xu = 2
@@ -643,12 +643,12 @@ class Plus_HP(pygame.sprite.Sprite):
         super().__init__(*groups)
         self.image = pygame.Surface((100, 100))
         self.rect = pygame.Rect(4, 400, 100, 100)
-        
+
     def update(self):
         self.image.fill((249, 215, 28))
         font = pygame.font.Font('interface/fonts/static/Unbounded-Bold.ttf', 36)
         text = font.render('+', True,
-                          'black')
+                           'black')
         self.image.blit(text, (40, 20))
 
 
@@ -678,7 +678,7 @@ class Scoreboard(pygame.sprite.Sprite):
                           'red')
         self.image.blit(text1, (1, 1))
         self.image.blit(text2, (40, 40))
-    
+
 
 # Кастомизированный курсор
 
@@ -701,10 +701,10 @@ class Cursor(pygame.sprite.Sprite):
             image = load_image("cursor_pixel.png")
 
         self.image = image
-        
+
         if position is not None:
             self.rect.topleft = position
-        
+
 
 # ?
 class EasterCar(pygame.sprite.Sprite):
@@ -726,8 +726,8 @@ class EasterCar(pygame.sprite.Sprite):
         elif self.rect.x > WIDTH - self.image.get_width() - 101:
             xu = -2
         self.rect = self.rect.move(xu, self.U)
-        
-        
+
+
 def get_key(value):
     global custom_keys
     for key, name in keys.items():
@@ -753,7 +753,7 @@ def main():
     DOWN, UP, LEFT, RIGHT = False, False, False, False
     for _ in range(3):
         random_appearence(cars_sprites)
-    
+
     # Ну а теперь обработка событий - на что нажал пользователь, куда и т.д.
     while running:
         for event in pygame.event.get():
@@ -797,7 +797,7 @@ def main():
                 random_appearence(cars_sprites)
                 if randint(1, 5) == 1:
                     random_appearence(cars_sprites, True)
-        
+
         update_background()
         all_sprites.update()
         all_sprites.draw(screen)

@@ -123,7 +123,11 @@ def start_easter_egg():
             self.path = path
 
         def play(self):
-            os.startfile(self.path)
+            try:
+                os.startfile(self.path)
+            except Exception:
+                os.system(f"mpv {self.path}")
+
 
     class Movie_MP4(Video):
         type = "MP4"
