@@ -11,6 +11,7 @@ road = pygame.image.load('interface/road.png')
 pygame.display.set_caption('Сars Game')
 size = WIDTH, HEIGHT = road.get_size()
 screen = pygame.display.set_mode(size)
+hp = 3
 cars_images = [file for file in os.listdir('interface/cars') if file[file.rfind('.'):] == ".png"]
 y1 = 0
 y2 = -HEIGHT
@@ -144,6 +145,16 @@ def terminate():
     sys.exit()
 
 
+class HitPoints(pygame.sprite.Sprite):
+     def __init__(self, position, *group):
+        super().__init__(*group)
+        self.image = load_image('heart.png')
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.centerx = position[0]
+        self.rect.centery = position[1]
+        
+
 # Работает как крестик - нажал на него - закрыл окно
 
 
@@ -179,7 +190,7 @@ class Hero(pygame.sprite.Sprite):
         self.rect.centery = HEIGHT / 4 * 3 - 15
 
     def update(self):
-        global UP, DOWN, RIGHT, LEFT, running
+        global UP, DOWN, RIGHT, LEFT, running, hp
         # Смотрим, врезался ли герой в какую-нибудь машинку
         for auto_car in cars_sprites.sprites():
             if pygame.sprite.collide_mask(self, auto_car):
@@ -189,8 +200,14 @@ class Hero(pygame.sprite.Sprite):
                     pygame.init()
                     start_easter_egg()
                     sys.exit()
-                running = False
-                game_over()
+                hp -= 1
+                all_sprites.remove(hp_sprites.sprites()[-1])
+                hp_sprites.remove(hp_sprites.sprites()[-1])
+                all_sprites.remove(auto_car)
+                cars_sprites.remove(auto_car)
+                if hp == 0:
+                    running = False
+                    game_over()
                 # terminate()
         # Иначе смотрим, куда поедет наш спрайт
         if UP and self.rect.y > 0:
@@ -353,12 +370,14 @@ class EasterCar(pygame.sprite.Sprite):
 
 
 def main():
-    global DOWN, UP, LEFT, RIGHT
+    global DOWN, UP, LEFT, RIGHT, hp
     hero.restart_hero()
     pygame.mouse.set_visible(False)
     died_sound.stop()
     pygame.mixer.music.play(-1)
     load_coins()
+    for asd in range(0, 99, 33):
+        HitPoints((15 + asd, 330), all_sprites, hp_sprites)
     running = True
     DOWN, UP, LEFT, RIGHT = False, False, False, False
     for _ in range(3):
@@ -421,6 +440,7 @@ if __name__ == '__main__':
     cars_sprites = pygame.sprite.Group()
     easter_sprite = pygame.sprite.Group()
     coins_sprites = pygame.sprite.Group()
+    hp_sprites = pygame.sprite.Group()
     # ?
     easter_flag = True
     # Объявляем нужные переменные и создаем все нужные спрайты
