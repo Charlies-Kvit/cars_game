@@ -20,9 +20,25 @@ y2 = -HEIGHT
 FPS = 120
 
 # Дефолтные настройки
+database = sqlite3.connect(r"./config/data_base.db3")
+db_cursor = database.cursor()
+db_cursor.execute("""CREATE TABLE IF NOT EXISTS custom_setting(
+                    id INTEGER PRIMARY KEY,
+                    keys TEXT,
+                    mode TEXT);""")
+database.commit()
+
 default_keys = ['W', 'S', 'A', 'D']
-custom_keys = default_keys
-mode = 'normal'
+
+if db_cursor.execute("""SELECT COUNT(*) FROM custom_setting""").fetchone()[0] != 0:
+    custom_keys = db_cursor.execute("""SELECT keys FROM custom_setting WHERE id=1""").fetchone()[0].split()
+    mode = db_cursor.execute("""SELECT mode FROM custom_setting WHERE id=1""").fetchone()[0]
+else:
+    custom_keys = default_keys
+    mode = 'normal'
+    db_cursor.execute("""INSERT INTO custom_setting(id, keys, mode)
+                                        VALUES(?, ?, ?)""", (1, ' '.join(custom_keys), mode))
+    database.commit()
 
 # Загружаем фоновую музыку и звуки
 died_sound = pygame.mixer.Sound(os.path.join("interface", "game_sounds", "died_sound.mp3"))
@@ -274,6 +290,8 @@ class Settings:
                             mode = 'pixel'
                         else:
                             mode = 'normal'
+                        db_cursor.execute("""UPDATE custom_setting SET mode=? WHERE id=1;""", (mode,))
+                        database.commit()
 
             self.buttons.draw(screen)
             buttons.draw(screen)
@@ -323,24 +341,32 @@ class Settings:
                     if event.key in keys.keys() and \
                             keys[event.key] not in custom_keys:
                         custom_keys[0] = keys[event.key]
+                        db_cursor.execute("""UPDATE custom_setting SET keys=? WHERE id=1;""", (' '.join(custom_keys),))
+                        database.commit()
 
                 if 400 <= mouse_pos[0] <= 975 and 278 <= mouse_pos[1] <= 355 \
                         and event.type == pygame.KEYDOWN:
                     if event.key in keys.keys() and \
                             keys[event.key] not in custom_keys:
                         custom_keys[1] = keys[event.key]
+                        db_cursor.execute("""UPDATE custom_setting SET keys=? WHERE id=1;""", (' '.join(custom_keys),))
+                        database.commit()
 
                 if 400 <= mouse_pos[0] <= 975 and 360 <= mouse_pos[1] <= 436 \
                         and event.type == pygame.KEYDOWN:
                     if event.key in keys.keys() and \
                             keys[event.key] not in custom_keys:
                         custom_keys[2] = keys[event.key]
+                        db_cursor.execute("""UPDATE custom_setting SET keys=? WHERE id=1;""", (' '.join(custom_keys),))
+                        database.commit()
 
                 if 400 <= mouse_pos[0] <= 975 and 442 <= mouse_pos[1] <= 516 \
                         and event.type == pygame.KEYDOWN:
                     if event.key in keys.keys() and \
                             keys[event.key] not in custom_keys:
                         custom_keys[3] = keys[event.key]
+                        db_cursor.execute("""UPDATE custom_setting SET keys=? WHERE id=1;""", (' '.join(custom_keys),))
+                        database.commit()
 
             self.buttons.draw(screen)
             pygame.display.flip()
