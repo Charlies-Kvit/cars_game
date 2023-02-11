@@ -596,6 +596,9 @@ class Car(pygame.sprite.Sprite):
 
     def update(self):
         # Если машинка выезжает за пределы дороги - толкаем ее обратно
+        for auto_car in cars_sprites.sprites():
+            if pygame.sprite.collide_mask(self, auto_car) and auto_car != self:
+                self.U = 5
         xu = 0
         if self.rect.x < 101:
             xu = 2
