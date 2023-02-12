@@ -476,15 +476,17 @@ def random_appearence(over_cars, ccc=False):
 
 
 def terminate():
-    con = sqlite3.connect(r"./config/data_base.db3")
-    cur = con.cursor()
-    cur.execute(f"UPDATE Player_records SET number_of_points = '{kolvo_coins}'")
-    con.commit()
-    cur.close()
-    with open("config/logs.txt", "w"):
-        pass
-    pygame.quit()
-    sys.exit()
+    try:
+        con = sqlite3.connect(r"./config/data_base.db3")
+        cur = con.cursor()
+        cur.execute(f"UPDATE Player_records SET number_of_points = '{kolvo_coins}'")
+        con.commit()
+        cur.close()
+    finally:
+        with open("config/logs.txt", "w"):
+            pass
+        pygame.quit()
+        sys.exit()
 
 
 class HitPoints(pygame.sprite.Sprite):
