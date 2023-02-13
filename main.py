@@ -816,6 +816,12 @@ def main():
                     DOWN = False
                 if event.key == get_key(custom_keys[3]):
                     RIGHT = False
+                if event.key == pygame.K_F1:
+                  if kolvo_coins >= 10:
+                        kolvo_coins -= 10
+                        hp += 1
+                        HitPoints((hp_sprites.sprites()[-1].rect.topleft[0] + 53, 330), all_sprites, hp_sprites)
+                        
             if event.type == pygame.MOUSEBUTTONDOWN:
                 xcross.update(True)
                 if cursor.rect.topleft[0] in range(4, 104) and cursor.rect.topleft[1] in range(400, 500):
