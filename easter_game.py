@@ -126,7 +126,7 @@ def start_easter_egg():
             try:
                 os.startfile(self.path)
             except Exception:
-                os.system(f"mpv {self.path}")
+                os.system(f"vlc {self.path}")
 
     class Movie_MP4(Video):
         type = "MP4"
