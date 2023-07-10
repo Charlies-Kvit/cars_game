@@ -128,7 +128,7 @@ def start_easter_egg():
             except Exception:
                 try:
                     os.system(f"vlc {self.path}")
-                excpet Exception:
+                except Exception:
                     print("Can't start video!")
 
     class Movie_MP4(Video):
